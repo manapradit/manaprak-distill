@@ -9,8 +9,13 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Project Proposal"
-      href: projects.html 
+#    - text: "Project Proposal"
+#      href: projects.html 
     - text: "Projects"
-      href: projects.html     
+      href: projects.html
+    - text: "STA518 Projects"
+      menu:
+        - text: "Diamonds"
+          href: diamonds.html 
+      
 output: distill::distill_article

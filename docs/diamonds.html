@@ -86,26 +86,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Kanyanee's Project: Projects</title>
+  <title>Kanyanee's Project: Diamonds</title>
 
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Kanyanee&#39;s Project: Projects"/>
+  <meta property="og:title" content="Kanyanee&#39;s Project: Diamonds"/>
   <meta property="og:type" content="article"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Kanyanee&#39;s Project"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Kanyanee&#39;s Project: Projects"/>
+  <meta property="twitter:title" content="Kanyanee&#39;s Project: Diamonds"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Projects"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title"]}},"value":[{"type":"character","attributes":{},"value":["Diamonds"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2053,7 +2053,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Projects","authors":[]}
+{"title":"Diamonds","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2086,7 +2086,7 @@ STA518 Projects
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Projects</h1>
+<h1>Diamonds</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
 
@@ -2094,11 +2094,477 @@ STA518 Projects
 
 
 <div class="d-article">
-<h1 id="diamond-price-project">Diamond price project</h1>
-<p>This project use regression analysis to predict diamond price. Link</p>
-<h1 id="qq-plot-r-shiny">QQ-Plot R Shiny</h1>
-<p>This is si</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="sta-518-project">STA 518 Project</h1>
+<h1 id="overview">Overview</h1>
+<p>Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond price and create interactive application to estimate the input characteristic. We run regression using diamonds dataset from Tidyverse package, which consists of 53940 round diamonds and 10 variables. The final model use cut, carat, color, and clarity to estimate the price. (r2 = 90.5)</p>
+<h1 id="data-description">Data Description</h1>
+<p>I found the dataset from Kaggle website (<a href="https://www.kaggle.com/shivam2503/diamonds" class="uri">https://www.kaggle.com/shivam2503/diamonds</a>). It can also be downloaded from R Tidyverse package, called diamonds. The data set consist of round cut diamonds from Tiffany &amp; Co’s snapshot price list in 2017. The original dataset includes 53940 samples and 10 variables. However, this analysis will contain house that has up to six bedrooms and dropped the dataset to 53920 and 10 variables.</p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>variable</th>
+<th>Type</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>price</td>
+<td>Numeric</td>
+<td>price in US dollars</td>
+</tr>
+<tr class="even">
+<td>carat</td>
+<td>Numeric</td>
+<td>weight of the diamond</td>
+</tr>
+<tr class="odd">
+<td>cut</td>
+<td>Ordinal</td>
+<td>quality of the cut (Fair, Good, Very Good, Premium, Ideal)</td>
+</tr>
+<tr class="even">
+<td>color</td>
+<td>Ordinal</td>
+<td>diamond color, from D (best) to J (worst)</td>
+</tr>
+<tr class="odd">
+<td>clarity</td>
+<td>Ordinal</td>
+<td>a measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))</td>
+</tr>
+<tr class="even">
+<td>x</td>
+<td>Numeric</td>
+<td>length in mm (0–10.74)</td>
+</tr>
+<tr class="odd">
+<td>y</td>
+<td>Numeric</td>
+<td>width in mm (0–58.9)</td>
+</tr>
+<tr class="even">
+<td>z</td>
+<td>Numeric</td>
+<td>depth in mm (0–31.8)</td>
+</tr>
+<tr class="odd">
+<td>depth</td>
+<td>Numeric</td>
+<td>total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43–79)</td>
+</tr>
+<tr class="even">
+<td>table</td>
+<td>Numeric</td>
+<td>width of top of diamond relative to widest point (43–95)</td>
+</tr>
+</tbody>
+</table>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Look at the diamonds dataset from Tidyverse package </span>
+<span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>diamonds</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 53,940
+Columns: 10
+$ carat   &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22~
+$ cut     &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very~
+$ color   &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J~
+$ clarity &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, ~
+$ depth   &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1~
+$ table   &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, ~
+$ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 33~
+$ x       &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87~
+$ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78~
+$ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</code></pre>
+</div>
+<h1 id="data-cleaning-validation-and-preparation">Data cleaning, validation and preparation</h1>
+<p>The diamonds data requires small cleaning as it is very clean and well organized. Since I will perform regression, I decided to convert the 3 ordinal variables to numeric scale. I also remove observation with value 0 in x, y, and z variables because it does not make sense if the dimension is 0.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use plyr::revalue to convert cut, color and clarity scales to number</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>diamonds</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>color</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/plyr/man/revalue.html'>revalue</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>color</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"D"</span><span class='op'>=</span><span class='fl'>1</span>, <span class='st'>"E"</span><span class='op'>=</span><span class='fl'>2</span>, <span class='st'>"F"</span><span class='op'>=</span><span class='fl'>3</span>, <span class='st'>"G"</span><span class='op'>=</span><span class='fl'>4</span>, <span class='st'>"H"</span><span class='op'>=</span><span class='fl'>5</span>, <span class='st'>"I"</span><span class='op'>=</span><span class='fl'>6</span>, <span class='st'>"J"</span><span class='op'>=</span><span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>clarity</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/plyr/man/revalue.html'>revalue</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>clarity</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IF"</span><span class='op'>=</span><span class='fl'>1</span>, <span class='st'>"VVS1"</span><span class='op'>=</span><span class='fl'>2</span>, <span class='st'>"VVS2"</span><span class='op'>=</span><span class='fl'>3</span>, <span class='st'>"VS1"</span><span class='op'>=</span><span class='fl'>4</span>, <span class='st'>"VS2"</span><span class='op'>=</span><span class='fl'>5</span>, <span class='st'>"SI1"</span><span class='op'>=</span><span class='fl'>6</span>, <span class='st'>"SI2"</span><span class='op'>=</span><span class='fl'>7</span>, <span class='st'>"I1"</span><span class='op'>=</span><span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>cut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/plyr/man/revalue.html'>revalue</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cut</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Fair"</span><span class='op'>=</span><span class='fl'>1</span>, <span class='st'>"Good"</span><span class='op'>=</span><span class='fl'>2</span>, <span class='st'>"Very Good"</span><span class='op'>=</span><span class='fl'>3</span>, <span class='st'>"Premium"</span><span class='op'>=</span><span class='fl'>4</span>, <span class='st'>"Ideal"</span><span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='co'>#filter(cut %in% c("Ideal", "Premium", "Very Good")) %&gt;% </span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span> 
+
+<span class='co'>#describe(data, ranges = FALSE)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>     carat             cut            color          clarity     
+ Min.   :0.2000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+ 1st Qu.:0.4000   1st Qu.:3.000   1st Qu.:2.000   1st Qu.:3.000  
+ Median :0.7000   Median :4.000   Median :4.000   Median :4.000  
+ Mean   :0.7977   Mean   :3.904   Mean   :3.594   Mean   :4.052  
+ 3rd Qu.:1.0400   3rd Qu.:5.000   3rd Qu.:5.000   3rd Qu.:5.000  
+ Max.   :5.0100   Max.   :5.000   Max.   :7.000   Max.   :8.000  
+     depth           table           price             x         
+ Min.   :43.00   Min.   :43.00   Min.   :  326   Min.   : 3.730  
+ 1st Qu.:61.00   1st Qu.:56.00   1st Qu.:  949   1st Qu.: 4.710  
+ Median :61.80   Median :57.00   Median : 2401   Median : 5.700  
+ Mean   :61.75   Mean   :57.46   Mean   : 3931   Mean   : 5.732  
+ 3rd Qu.:62.50   3rd Qu.:59.00   3rd Qu.: 5323   3rd Qu.: 6.540  
+ Max.   :79.00   Max.   :95.00   Max.   :18823   Max.   :10.740  
+       y                z        
+ Min.   : 3.680   Min.   : 1.07  
+ 1st Qu.: 4.720   1st Qu.: 2.91  
+ Median : 5.710   Median : 3.53  
+ Mean   : 5.735   Mean   : 3.54  
+ 3rd Qu.: 6.540   3rd Qu.: 4.04  
+ Max.   :58.900   Max.   :31.80  </code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>data</span>,<span class='va'>cut</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 2
+    cut     n
+  &lt;dbl&gt; &lt;int&gt;
+1     1  1609
+2     2  4902
+3     3 12081
+4     4 13780
+5     5 21548</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>data</span>,<span class='va'>color</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 7 x 2
+  color     n
+  &lt;dbl&gt; &lt;int&gt;
+1     1  6774
+2     2  9797
+3     3  9538
+4     4 11284
+5     5  8298
+6     6  5421
+7     7  2808</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>data</span>,<span class='va'>clarity</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 8 x 2
+  clarity     n
+    &lt;dbl&gt; &lt;int&gt;
+1       1   738
+2       2  9185
+3       3 13063
+4       4 12254
+5       5  8170
+6       6  5066
+7       7  3654
+8       8  1790</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#dlookr::plot_normality(data)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>price</span>, <span class='va'>carat</span>, colour <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<img src="diamonds_files/figure-html5/EDA%20price%20carat-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>price</span>, <span class='va'>carat</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/EDA%20price%20carat-2.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;carat&quot;   &quot;cut&quot;     &quot;color&quot;   &quot;clarity&quot; &quot;depth&quot;   &quot;table&quot;  
+ [7] &quot;price&quot;   &quot;x&quot;       &quot;y&quot;       &quot;z&quot;      </code></pre>
+</div>
+<h1 id="correlations">Correlations</h1>
+<p>The correlation plot below show relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All 3 variables also highly correlate to carat variable. While, the relation between dependent variable with cut and depth has very small negative relation. Therefore, I will remove variable x, y, and z to prevent multicollinearity.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cor_data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>price</span>,<span class='va'>carat</span>,<span class='va'>cut</span>,<span class='va'>color</span>,<span class='va'>clarity</span>,<span class='va'>depth</span>,<span class='va'>table</span>,<span class='va'>x</span>,<span class='va'>y</span>,<span class='va'>z</span><span class='op'>)</span>
+
+<span class='co'>#library("corrgram")</span>
+<span class='fu'><a href='https://kwstat.github.io/corrgram/reference/corrgram.html'>corrgram</a></span><span class='op'>(</span><span class='va'>cor_data</span>,
+upper.panel<span class='op'>=</span><span class='va'>panel.cor</span>, main<span class='op'>=</span><span class='st'>"Correlation"</span>,
+<span class='co'>#lower.panel=corrgram::panel.ellipse,</span>
+diag.panel<span class='op'>=</span><span class='va'>panel.density</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/EDA%20Correlogram-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#library(ggstatsplot)</span>
+<span class='co'># correlogram</span>
+<span class='fu'>ggstatsplot</span><span class='fu'>::</span><span class='fu'><a href='https://indrajeetpatil.github.io/ggstatsplot/reference/ggcorrmat.html'>ggcorrmat</a></span><span class='op'>(</span>
+  data <span class='op'>=</span> <span class='va'>cor_data</span>,
+  type <span class='op'>=</span> <span class='st'>"parametric"</span>, <span class='co'># parametric for Pearson, nonparametric for Spearman's correlation</span>
+  colors <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"darkred"</span>, <span class='st'>"white"</span>, <span class='st'>"steelblue"</span><span class='op'>)</span> <span class='co'># change default colors</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/EDA%20Correlogram2-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<pre><code>    carat       cut     color   clarity     depth     table         x 
+24.838037  1.483701  1.120603  1.230140  1.807764  1.580987 64.340380 
+        y         z 
+20.733711 29.940364 </code></pre>
+<pre><code>   carat      cut    color  clarity    depth    table 
+1.297629 1.482007 1.118782 1.200325 1.320529 1.576594 </code></pre>
+</div>
+<h1 id="model-selection">Model selection</h1>
+<h2 id="data-division-into-train-data-and-test-data">Data division into train data and test data</h2>
+<p>We will randomly divide the data into train data and test data. The 70 percent is train data which has 37744 observations. The train data will be used to predict the model and the test data will be used to fit the final model to observe the model accuracy.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data2</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>price</span>,<span class='va'>carat</span>,<span class='va'>cut</span>,<span class='va'>color</span>,<span class='va'>clarity</span>,<span class='va'>depth</span>,<span class='va'>table</span>,<span class='va'>x</span>,<span class='va'>y</span>,<span class='va'>z</span><span class='op'>)</span>
+
+<span class='co'># split data for training data and test data</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>789</span><span class='op'>)</span>
+<span class='va'>train</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_frac</a></span><span class='op'>(</span><span class='fl'>0.7</span><span class='op'>)</span>
+<span class='va'>test</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://generics.r-lib.org/reference/setops.html'>setdiff</a></span><span class='op'>(</span><span class='va'>train</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="data-subsetting">Data subsetting</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>leaps</span><span class='op'>)</span>
+<span class='va'>regfit_full</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/leaps/man/regsubsets.html'>regsubsets</a></span><span class='op'>(</span><span class='va'>price</span> <span class='op'>~</span> <span class='va'>carat</span><span class='op'>+</span><span class='va'>cut</span><span class='op'>+</span><span class='va'>color</span><span class='op'>+</span><span class='va'>clarity</span><span class='op'>+</span><span class='va'>depth</span><span class='op'>+</span><span class='va'>table</span>, data<span class='op'>=</span><span class='va'>train</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>regfit_full</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Subset selection object
+Call: regsubsets.formula(price ~ carat + cut + color + clarity + depth + 
+    table, data = train)
+6 Variables  (and intercept)
+        Forced in Forced out
+carat       FALSE      FALSE
+cut         FALSE      FALSE
+color       FALSE      FALSE
+clarity     FALSE      FALSE
+depth       FALSE      FALSE
+table       FALSE      FALSE
+1 subsets of each size up to 6
+Selection Algorithm: exhaustive
+         carat cut color clarity depth table
+1  ( 1 ) &quot;*&quot;   &quot; &quot; &quot; &quot;   &quot; &quot;     &quot; &quot;   &quot; &quot;  
+2  ( 1 ) &quot;*&quot;   &quot; &quot; &quot; &quot;   &quot;*&quot;     &quot; &quot;   &quot; &quot;  
+3  ( 1 ) &quot;*&quot;   &quot; &quot; &quot;*&quot;   &quot;*&quot;     &quot; &quot;   &quot; &quot;  
+4  ( 1 ) &quot;*&quot;   &quot;*&quot; &quot;*&quot;   &quot;*&quot;     &quot; &quot;   &quot; &quot;  
+5  ( 1 ) &quot;*&quot;   &quot;*&quot; &quot;*&quot;   &quot;*&quot;     &quot;*&quot;   &quot; &quot;  
+6  ( 1 ) &quot;*&quot;   &quot;*&quot; &quot;*&quot;   &quot;*&quot;     &quot;*&quot;   &quot;*&quot;  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>regfit_full</span>, scale<span class='op'>=</span><span class='st'>"bic"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="diamonds_files/figure-html5/Subsetting-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>regfit_full</span>, scale<span class='op'>=</span><span class='st'>"r2"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/Subsetting-2.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm6</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>price</span> <span class='op'>~</span> <span class='va'>carat</span><span class='op'>+</span><span class='va'>cut</span><span class='op'>+</span><span class='va'>color</span><span class='op'>+</span><span class='va'>clarity</span><span class='op'>+</span><span class='va'>depth</span><span class='op'>+</span><span class='va'>table</span>, data <span class='op'>=</span> <span class='va'>train</span><span class='op'>)</span>
+
+<span class='va'>fit.lm6</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 7 x 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    -63.0    460.      -0.137 8.91e- 1
+2 carat         8785.      15.2    579.    0       
+3 cut            132.       6.88    19.2   5.20e-82
+4 color         -317.       3.93   -80.6   0       
+5 clarity        515.       4.21   123.    0       
+6 depth          -50.1      5.09    -9.84  7.90e-23
+7 table          -24.2      3.56    -6.81  9.69e-12</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm6</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 37,744 x 13
+   price carat   cut color clarity depth table .fitted  .resid    .hat
+   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1  3985  0.93     5     5       3  61.6    54   4339. -354.   1.50e-4
+ 2  1046  0.31     4     4       7  59.5    60   1098.  -51.6  2.10e-4
+ 3  2959  0.7      3     3       5  60.1    58   3696. -737.   1.23e-4
+ 4  4876  1.01     5     5       3  62.3    59   4885.   -9.18 1.64e-4
+ 5   630  0.3      1     2       3  64.5    49   -799. 1429.   1.08e-3
+ 6   462  0.26     5     5       5  62.2    55   -571. 1033.   1.29e-4
+ 7   734  0.31     4     2       5  61      58    674.   60.0  7.70e-5
+ 8  2936  0.74     5     3       4  60.5    59   3752. -816.   9.70e-5
+ 9  1294  0.44     5     1       5  61.6    56   2284. -990.   1.18e-4
+10  4201  0.91     4     5       4  61.9    59   4410. -209.   6.84e-5
+# ... with 37,734 more rows, and 3 more variables: .sigma &lt;dbl&gt;,
+#   .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm6</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 12
+  r.squared adj.r.squared sigma statistic p.value    df  logLik    AIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1     0.905         0.905 1226.    60155.       0     6 -3.22e5 6.44e5
+# ... with 4 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;,
+#   df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>pred.lm6</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit.lm6</span>, <span class='va'>test</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>pred.lm6</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 1558490</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test.avg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span>
+<span class='va'>ols6.r2</span> <span class='op'>&lt;-</span> <span class='fl'>1</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>pred.lm6</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>test.avg</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"R-square:"</span> , <span class='va'>ols6.r2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>R-square: 0.9018549</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit.lm6</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = price ~ carat + cut + color + clarity + depth + 
+    table, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19653.8   -688.0   -170.4    544.8   9060.2 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -63.005    460.159  -0.137    0.891    
+carat       8785.224     15.184 578.591  &lt; 2e-16 ***
+cut          132.378      6.884  19.229  &lt; 2e-16 ***
+color       -316.898      3.931 -80.612  &lt; 2e-16 ***
+clarity      515.401      4.207 122.510  &lt; 2e-16 ***
+depth        -50.059      5.086  -9.842  &lt; 2e-16 ***
+table        -24.234      3.557  -6.813 9.69e-12 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1226 on 37737 degrees of freedom
+Multiple R-squared:  0.9053,    Adjusted R-squared:  0.9053 
+F-statistic: 6.015e+04 on 6 and 37737 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<h1 id="i-pick-this-model">I pick this model</h1>
+<p>price = -7.165 + 8776.430carat + 165.511cut - 318.820color - 518.648clarity</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>price</span> <span class='op'>~</span> <span class='va'>carat</span><span class='op'>+</span><span class='va'>cut</span><span class='op'>+</span><span class='va'>color</span><span class='op'>+</span><span class='va'>clarity</span>, data <span class='op'>=</span> <span class='va'>train</span><span class='op'>)</span>
+
+<span class='va'>fit.lm4</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 5
+  term        estimate std.error statistic   p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   -4675.     32.9     -142.  0        
+2 carat          8776.     15.1      581.  0        
+3 cut             166.      5.79      28.6 9.81e-178
+4 color          -319.      3.93     -81.1 0        
+5 clarity         519.      4.20     124.  0        </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm4</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 37,744 x 11
+   price carat   cut color clarity .fitted .resid      .hat .sigma
+   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+ 1  3985  0.93     5     5       3   4276. -291.  0.0000915  1228.
+ 2  1046  0.31     4     4       7   1063.  -17.0 0.000122   1228.
+ 3  2959  0.7      3     3       5   3602. -643.  0.0000627  1228.
+ 4  4876  1.01     5     5       3   4979. -103.  0.0000909  1228.
+ 5   630  0.3      1     2       3   -958. 1588.  0.000279   1228.
+ 6   462  0.26     5     5       5   -566. 1028.  0.000118   1228.
+ 7   734  0.31     4     2       5    663.   70.7 0.0000691  1228.
+ 8  2936  0.74     5     3       4   3765. -829.  0.0000560  1228.
+ 9  1294  0.44     5     1       5   2289. -995.  0.000117   1228.
+10  4201  0.91     4     5       4   4454. -253.  0.0000450  1228.
+# ... with 37,734 more rows, and 2 more variables: .cooksd &lt;dbl&gt;,
+#   .std.resid &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit.lm4</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 12
+  r.squared adj.r.squared sigma statistic p.value    df  logLik    AIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+1     0.905         0.905 1228.    89963.       0     4 -3.22e5 6.44e5
+# ... with 4 more variables: BIC &lt;dbl&gt;, deviance &lt;dbl&gt;,
+#   df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>pred.lm4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit.lm4</span>, <span class='va'>test</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>pred.lm4</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 1560832</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ols4.r2</span> <span class='op'>&lt;-</span> <span class='fl'>1</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>pred.lm4</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span> <span class='op'>/</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span> <span class='op'>-</span> <span class='va'>test</span><span class='op'>$</span><span class='va'>price</span><span class='op'>)</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span><span class='op'>(</span><span class='st'>"R-square:"</span> , <span class='va'>ols4.r2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>R-square: 0.9017074</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit.lm4</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = price ~ carat + cut + color + clarity, data = train)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-19729.3   -688.2   -169.5    542.3   9071.3 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -4674.997     32.876 -142.20   &lt;2e-16 ***
+carat        8776.430     15.103  581.09   &lt;2e-16 ***
+cut           165.511      5.791   28.58   &lt;2e-16 ***
+color        -318.820      3.930  -81.11   &lt;2e-16 ***
+clarity       518.648      4.199  123.51   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1228 on 37739 degrees of freedom
+Multiple R-squared:  0.9051,    Adjusted R-squared:  0.9051 
+F-statistic: 8.996e+04 on 4 and 37739 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
