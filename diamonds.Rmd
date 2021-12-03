@@ -22,7 +22,7 @@ library(leaps)
 
 # Overview
 
-Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond prices and create an interactive application to estimate the input characteristic. We run regressions using the diamonds dataset, consisting of 53,940 round diamonds and ten variables. The final model use carat, color, and clarity as variables to estimate their causality on diamond price. The model goodness of fit is evaluated by $R^2$ of 0.903.
+Diamonds take billions of years to form and not all of them survive the long journey. This project aims to estimate the effects on diamond prices. We run regressions using the diamonds dataset, consisting of 53,940 round diamonds and ten variables. The final model use carat, color, and clarity as variables to estimate their causality on diamond price. The model goodness of fit is evaluated by $R^2$ of 0.903.
 
 # Data Description
 
