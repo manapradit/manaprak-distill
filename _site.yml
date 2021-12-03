@@ -8,7 +8,11 @@ navbar:
     - text: "Home"
       href: index.html
     - text: "Diamonds"
-      href: diamonds.html       
+      href: diamonds.html    
+    - text: "Q-Q plot"
+      href: qqplot.html
+    
+    
       
       
 #    - text: "About"
