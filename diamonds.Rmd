@@ -82,6 +82,8 @@ dplyr::count(data,color)
 dplyr::count(data,clarity)
 ```
 
+**Pie chart of the Diamond Cut**
+
 The pie chart shows the diamond cut ratio. The majority of the diamond was pretty well. IN this given data, 40 percent of the diamond was ideal cut. 26 percent was premium. 22 percent was very good. And, only 3 percent was fair.
 
 ```{r Pie chart}
@@ -99,6 +101,8 @@ diamonds%>%
   theme_void()+
   labs(title = "Pie chart of the Diamond Cut")
 ```
+
+**Diamond Frequency by Color**
 
 The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J at, which is more yellow than other levels.
 
@@ -118,6 +122,8 @@ diamonds%>%
     axis.ticks.x = element_blank())+
   geom_text(aes(label = count, vjust = -0.4))
 ```
+
+**Diamond Frequency by Clarity Level**
 
 The lollipop chart presents the data frequency by clarity color. The majority of diamonds are slightly included, such as VS2, SI1, and SI2. There are 1,790 internally flawless diamonds. The included diamond is smallest at only 738 observations.
 
@@ -246,9 +252,9 @@ test = data2 %>%
 setdiff(train)
 ```
 
-# Data subsetting
+## Subsetting
 
-The below charts allow us to see the different value of BIC, Cp, $R^2$, and adjusted $R^2$, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model with 4 variables and 3 variables, with and without cut variable.
+The below charts allow us to see the different values of BIC, Cp, $R^2$, and adjusted $R^2$, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model with 4 variables and 3 variables, with and without cut variable.
 
 ```{r Subsetting}
 # require library(leaps)
@@ -263,9 +269,9 @@ plot(regfit_full, scale="adjr2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
 
 # Model
 
-**Model with 4 variables**
+**Model with 4 variables:**
 
-<div align="center">price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity</div>
+**price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity**
 
 The estimated effect of carat on diamond price is 8776, the estimated effect of cut is 165, the estimated effect of color is -318, and the estimated effect of clarity is 518. 
 
@@ -276,9 +282,9 @@ knitr::kable(fit_lm4 %>% broom::augment()%>%slice(1:10))
 knitr::kable(fit_lm4 %>% broom::glance())
 ```
 
-**Model with 3 variables** 
+**Model with 3 variables:** 
 
-<div align="center"> price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity </div>
+**price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity**
 
 The estimated effect of carat on diamond price is 8746, the estimated effect of color is -319, and the estimated effect of clarity is 537. 
 
