@@ -280,6 +280,13 @@ fit_lm4 <- lm(price ~ carat+cut+color+clarity, data = train)
 knitr::kable(fit_lm4 %>% broom::tidy())
 knitr::kable(fit_lm4 %>% broom::augment()%>%slice(1:10))
 knitr::kable(fit_lm4 %>% broom::glance())
+
+res_function <- function(mod){
+  par(mfrow = c(2, 2))  
+plot(mod)
+}
+
+res_function(fit_lm4)
 ```
 
 **Model with 3 variables:** 
@@ -293,6 +300,7 @@ fit_lm3 <- lm(price ~ carat+color+clarity, data = train)
 knitr::kable(fit_lm3 %>% broom::tidy())
 knitr::kable(fit_lm3 %>% broom::augment()%>%slice(1:10))
 knitr::kable(fit_lm3 %>% broom::glance())
+res_function(fit_lm3)
 ```
 
 # Conclusion

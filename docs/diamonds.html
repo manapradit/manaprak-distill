@@ -3018,6 +3018,16 @@ nobs
 </tr>
 </tbody>
 </table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>res_function</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>  
+<span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/notdocumentedyet.html'>plot</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='fu'>res_function</span><span class='op'>(</span><span class='va'>fit_lm4</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/Model%20with%204%20variables-1.png" width="624" /></p>
 </div>
 <p><strong>Model with 3 variables:</strong></p>
 <p><strong>price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity</strong></p>
@@ -3567,6 +3577,11 @@ nobs
 </tr>
 </tbody>
 </table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>res_function</span><span class='op'>(</span><span class='va'>fit_lm3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="diamonds_files/figure-html5/Model%20with%203%20variables-1.png" width="624" /></p>
 </div>
 <h1 id="conclusion">Conclusion</h1>
 <p>The models consisting of 3 variables and 4 variables represent slightly different values. The estimated effects of variables on diamonds price are about the same in each model. The R-squared of 3 variable model (<span class="math inline">\(R^2\)</span> = 0.903) is only 2.5 percent less than that of 4 variable model. Both models present high t-value with significant p-value. Therefore, I consider choosing the 3 variable model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables.</p>
