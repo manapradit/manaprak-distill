@@ -15,91 +15,202 @@ library(psych)
 library(dlookr)
 library(corrgram)
 library(ggstatsplot)
+library(leaps)
 ```
 
 # STA 518 Project
+
 # Overview
 
-Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond price and create interactive application to estimate the input characteristic. We run regression using diamonds dataset from Tidyverse package, which consists of 53940 round diamonds and 10 variables. The final model use cut, carat, color, and clarity to estimate the price. (r2 = 90.5)
+Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond price and create interactive application to estimate the input characteristic. We run regression using diamonds dataset which consists of 53940 round diamonds and 10 variables. The final model use carat, color, and clarity to estimate the price ($R^2$ = 0.903).
 
 # Data Description
 
-I found the dataset from Kaggle website (https://www.kaggle.com/shivam2503/diamonds). It can also be downloaded from R Tidyverse package, called diamonds. The data set consist of round cut diamonds from Tiffany & Co's snapshot price list in 2017. The original dataset includes 53940 samples and 10 variables. However, this analysis will contain house that has up to six bedrooms and dropped the dataset to 53920 and 10 variables. 
+I found the dataset from Kaggle website (https://www.kaggle.com/shivam2503/diamonds). It can also be downloaded from R Tidyverse package or ggplot2 package, called `diamonds`. The data set consist of round cut diamonds from Tiffany & Co's snapshot price list in 2017. The original dataset includes 53940 samples and 10 variables. However, this analysis will dropped 20 observations after cleaning the data. There are 7 numerical variable and 4 categorical variable. 
 
 |variable|Type|Detail|
 |--------|--------|---------------------------------------------------|
-|price   |Numeric |price in US dollars|
-|carat   |Numeric |weight of the diamond|
-|cut     |Ordinal |quality of the cut (Fair, Good, Very Good, Premium, Ideal)|
-|color   |Ordinal |diamond color, from D (best) to J (worst)|
-|clarity |Ordinal |a measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))|
-|x       |Numeric |length in mm (0–10.74)|
-|y       |Numeric |width in mm (0–58.9)|
-|z       |Numeric |depth in mm (0–31.8)|
-|depth   |Numeric |total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43–79)|
-|table   |Numeric |width of top of diamond relative to widest point (43–95)|
+|price   |Numeric |Price in US dollars|
+|carat   |Numeric |Weight of the diamond|
+|cut     |Ordinal |Quality of the cut (Fair, Good, Very Good, Premium, Ideal)|
+|color   |Ordinal |Diamond color, from D (best) to J (worst)|
+|clarity |Ordinal |A measurement of how clear the diamond is (I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best))|
+|x       |Numeric |Length in mm |
+|y       |Numeric |Width in mm |
+|z       |Numeric |Depth in mm |
+|depth   |Numeric |Total depth percentage|
+|table   |Numeric |Width of top of diamond relative to widest point|
+
+Let's look at the diamonds dataset from the R package. We do not need to separately download the raw data file because the data is available in Ggplot2, which is subset of Tidyverse package. If you want to import the data file into R, you can use `read_csv` function in the comment below. Then, we can use `glimpse` function to look at raw data.
 
 ```{r Import data}
-# Look at the diamonds dataset from Tidyverse package 
-glimpse(diamonds)
+#diamonds <- read_csv(here::here("data", "diamonds.csv")) 
+glimpse(diamonds)  
 ```
 
-# Data cleaning, validation and preparation
+# Data cleaning and preparation
 
-The diamonds data requires small cleaning as it is very clean and well organized. Since I will perform regression, I decided to convert the 3 ordinal variables to numeric scale. I also remove observation with value 0 in x, y, and z variables because it does not make sense if the dimension is 0. 
+The diamonds data requires small cleaning as it is very clean and well organized. Since I will perform regression, I decided to convert the 3 ordinal variables to numeric scale. and assumed that the scale for color and clarity are equally scale across the levels. I also remove observation with value zero in x, y, and z variables because it does not make sense if the dimension is zero. The dataset now have 53920 samples and 10 variables.
 
 ```{r Data cleaning}
-# use plyr::revalue to convert cut, color and clarity scales to number
+# use plyr::revalue to convert cut, color, and clarity scales to number
 data <- diamonds
 data$color <- as.numeric(revalue(data$color, c("D"=1, "E"=2, "F"=3, "G"=4, "H"=5, "I"=6, "J"=7)))
-data$clarity <- as.numeric(revalue(data$clarity, c("IF"=1, "VVS1"=2, "VVS2"=3, "VS1"=4, "VS2"=5, "SI1"=6, "SI2"=7, "I1"=8)))
+data$clarity <- as.numeric(revalue(data$clarity, c("IF"=8, "VVS1"=7, "VVS2"=6, "VS1"=5, "VS2"=4, "SI1"=3, "SI2"=2, "I1"=1)))
 data$cut <- as.numeric(revalue(data$cut, c("Fair"=1, "Good"=2, "Very Good"=3, "Premium"=4, "Ideal"=5)))
 
 data <- data %>%
-  #filter(cut %in% c("Ideal", "Premium", "Very Good")) %>% 
   filter(x>0, y>0, z>0) 
 
 #describe(data, ranges = FALSE)
 summary(data)
 ```
 
-```{r Frequency of ordinal variable}
+## Distribution and normality of each variable
+
+In this section we are going to explore the distribution and normality using `plot_normality()` function in  `dlookr` package. The function provides normality diagnosis of each variable including distribution of the original data (up left), Q-Q plot (up right), and transformation using log and square root (bottom).
+
+```{r Normality}
+dlookr::plot_normality(data)
+```
+
+# Exploratory Data Analysis (EDA)
+
+```{r Frequency of ordinal variable, include=FALSE}
 dplyr::count(data,cut)
 dplyr::count(data,color)
 dplyr::count(data,clarity)
 ```
 
-```{r normality}
-#dlookr::plot_normality(data)
+The pie chart shows the diamond cut ratio. The majority of the diamond was pretty well. IN this given data, 40 percent of the diamond was ideal cut. 26 percent was premium. 22 percent was very good. And, only 3 percent was fair.
+
+```{r Pie chart}
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  group_by(cut)%>%
+  dplyr::summarise(count=n())%>%
+  mutate(percent_data=paste(as.character(round(count*100/53920),2),"%"))%>% 
+  ggplot(aes(x="",y=count, fill=cut))+
+  geom_bar(stat="identity", width=1)+
+  coord_polar("y", start=0)+
+  scale_fill_brewer(palette="Blues")+
+  geom_text(aes(label = percent_data), 
+            position = position_stack(vjust = 0.5))+
+  theme_void()+
+  labs(title = "Pie chart of the Diamond Cut")
 ```
 
-```{r EDA price carat}
-ggplot(data, aes(price, carat, colour = as.factor(cut))) + geom_point() 
-ggplot(data, aes(price, carat, fill = as.factor(cut))) + geom_boxplot()
+The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J at, which is more yellow than other levels.
+
+```{r Bar chart}
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  group_by(color)%>%
+  dplyr::summarise(count=n())%>%
+  ggplot(aes(x=color,count,y=count, fill=color))+
+  geom_bar(stat="identity", colour="black")+
+  scale_fill_manual(values=c("#ffffff", "#fefcf3", "#fdfaeb", "#fdf8e4", "#fcf6dc", "#fcf5d4", "#fbf3cd"))+
+  labs(title = "Diamond Frequency by Color", x="Color of Diamond", y="Count")+
+  theme_bw()+
+  theme(legend.position = "none",
+    panel.grid.major.x = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.x = element_blank())+
+  geom_text(aes(label = count, vjust = -0.4))
 ```
+
+The lollipop chart presents the data frequency by clarity color. The majority of diamonds are slightly included, such as VS2, SI1, and SI2. There are 1,790 internally flawless diamonds. The included diamond is smallest at only 738 observations.
+
+```{r Lollipop chart}
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  group_by(clarity)%>%
+  dplyr::summarise(count=n())%>%
+  ggplot(aes(x=clarity, y=count))+
+  geom_segment( aes(x=clarity, xend=clarity, y=0, yend=count), color="grey")+
+  geom_point( color="gold", size=4, alpha=0.6)+
+  theme_light()+
+  coord_flip()+
+  labs(title="Diamond Frequency by Clarity Level", x="Clarity Level", y="Count")+
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.x = element_blank())+
+    geom_text(aes(label = count, vjust = -1))
+```
+
+```{r Bar clarity, include=FALSE}
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  group_by(clarity)%>%
+  dplyr::summarise(count=n())%>%
+  ggplot(aes(x=clarity, y=count, fill=clarity))+
+  geom_bar(stat="identity")+labs(title="Diamond Frequency by Clarity", x="Clearity of Diamond", y="Count")+
+  theme(legend.position = "none")+
+  theme_bw()+
+  geom_text(aes(label = count, vjust = -0.3))
+```
+
+## Diamond Price, Carat, and Cut
+
+Let's explore more about the relations between price, carat, and cut. The scatter plot shows that the better quality cut with the same amount of carat has higher price.
+
+```{r EDA price carat}
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  ggplot(aes(carat, price, colour = as.factor(cut))) + geom_point()+
+  labs(title = "Scatter plot of Price and Carat by Cut Quality", x="Carat", y="Diamond Price", fill="Cut Quality")
+
+diamonds%>%
+  filter(x>0, y>0, z>0)%>%
+  ggplot(aes(price, carat, fill = as.factor(cut))) + geom_boxplot()+
+  labs(title = "Boxplot of Price and Carat by Cut Quality", x="Diamond Price", y="Carat", fill="Cut Quality")+
+  coord_flip()
+```
+
+Before moving on to the next step, I want to check all the variable name in the dataset for validation and to easily include them in the next sections. 
 
 ```{r Column name}
 colnames(data)
 ```
 
-# Correlations 
+## Correlations 
 
 The correlation plot below show relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All 3 variables also highly correlate to carat variable. While, the relation between dependent variable with cut and depth has very small negative relation. Therefore, I will remove variable x, y, and z to prevent multicollinearity.
 
-```{r EDA Correlogram}
+```{r Correlogram0, include=FALSE}
+# I only include the last correlogram in the report.
+# The code is from the following link: https://r-coder.com/correlation-plot-r/
+corr_data0 <- data %>% 
+  dplyr::select(price,carat,depth,table,x,y,z)
+pairs.panels(corr_data0,
+             smooth = TRUE,      # If TRUE, draws loess smooths
+             scale = FALSE,      # If TRUE, scales the correlation text font
+             density = TRUE,     # If TRUE, adds density plots and histograms
+#             ellipses = TRUE,    # If TRUE, draws ellipses
+             method = "pearson", # Correlation method (also "spearman" or "kendall")
+#            pch = 21,           # pch symbol
+             lm = FALSE,         # If TRUE, plots linear fit rather than the LOESS (smoothed) fit
+             cor = TRUE,         # If TRUE, reports correlations
+#             jiggle = FALSE,     # If TRUE, data points are jittered
+#             factor = 2,         # Jittering factor
+             hist.col = 4,       # Histograms color
+             stars = TRUE)       # If TRUE, adds significance level with stars
+#             ci = TRUE)          # If TRUE, adds confidence intervals
+```
+
+```{r EDA Correlogram1, include=FALSE}
 cor_data <- data %>% 
   dplyr::select(price,carat,cut,color,clarity,depth,table,x,y,z)
 
-#library("corrgram")
+# require library(corrgram)
 corrgram(cor_data,
 upper.panel=panel.cor, main="Correlation",
-#lower.panel=corrgram::panel.ellipse,
 diag.panel=panel.density)
 ```
 
 ```{r EDA Correlogram2}
-#library(ggstatsplot)
-# correlogram
+# require library(ggstatsplot)
 ggstatsplot::ggcorrmat(
   data = cor_data,
   type = "parametric", # parametric for Pearson, nonparametric for Spearman's correlation
@@ -107,8 +218,11 @@ ggstatsplot::ggcorrmat(
 )
 ```
 
-```{r VIF, echo=FALSE }
-# Use variance inflation factor (VIF) to check that there are no two or more independent variables that predict each other.
+## Variance Inflation Factor (VIF)
+
+Use variance inflation factor (VIF) to check that there are no two or more independent variables that predict each other.
+
+```{r VIF}
 library(regclass)
 VIF(lm(price~carat+cut+color+clarity+depth+table+x+y+z, data=data))
 VIF(lm(price~carat+cut+color+clarity+depth+table, data=data))
@@ -118,74 +232,65 @@ VIF(lm(price~carat+cut+color+clarity+depth+table, data=data))
 
 ## Data division into train data and test data
 
-We will randomly divide the data into train data and test data. The 70 percent is train data which has 37744 observations. The train data will be used to predict the model and the test data will be used to fit the final model to observe the model accuracy. 
+We will randomly divide the data into 2 groups, train data and test data. First, we set the seed to make sure that we will get the same random result after running the code for interpretation purpose. 70 percent of the data or 37744 observations is the train data. The train data will be used to predict the model and the test data will be used to fit the final model to observe the model accuracy. 
 
 ```{r Train test data}
 data2 <- data %>% 
   dplyr::select(price,carat,cut,color,clarity,depth,table,x,y,z)
 
 # split data for training data and test data
-set.seed(789)
+set.seed(789) # set seed to gain the same random pattern
 train = data2 %>%
 sample_frac(0.7)
 test = data2 %>%
 setdiff(train)
 ```
 
-## Data subsetting
+# Data subsetting
+
+The below charts allow us to see the different value of BIC, Cp, $R^2$, and adjusted $R^2$, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model with 4 variables and 3 variables, with and without cut variable.
 
 ```{r Subsetting}
-library(leaps)
+# require library(leaps)
 regfit_full = regsubsets(price ~ carat+cut+color+clarity+depth+table, data=train)
 summary(regfit_full)
 
-plot(regfit_full, scale="bic")
-plot(regfit_full, scale="r2")
+plot(regfit_full, scale="bic", col=c("#51e2f5","#9df9ef", "#a28089"))
+plot(regfit_full, scale="Cp", col=c("#51e2f5","#9df9ef", "#a28089"))
+plot(regfit_full, scale="r2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
+plot(regfit_full, scale="adjr2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
 ```
 
-```{r Model with 6 variables}
-fit.lm6 <- lm(price ~ carat+cut+color+clarity+depth+table, data = train)
+# Model
 
-fit.lm6  %>% 
-  broom::tidy()
+**Model with 4 variables**
 
-fit.lm6  %>% 
-  broom::augment()
+<div align="center">price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity</div>
 
-fit.lm6  %>% 
-  broom::glance()
-
-pred.lm6 <- predict(fit.lm6, test)
-mean((pred.lm6 - test$price)^2)
-test.avg <- mean(test$price)
-ols6.r2 <- 1 - mean((pred.lm6 - test$price)^2) / mean((test.avg - test$price)^2)
-cat("R-square:" , ols6.r2)
-summary(fit.lm6)
-```
-
-# I pick this model
-
-price = -7.165 + 8776.430carat + 165.511cut - 318.820color - 518.648clarity
+The estimated effect of carat on diamond price is 8776, the estimated effect of cut is 165, the estimated effect of color is -318, and the estimated effect of clarity is 518. 
 
 ```{r Model with 4 variables}
-fit.lm4 <- lm(price ~ carat+cut+color+clarity, data = train)
-
-fit.lm4  %>% 
-  broom::tidy()
-
-fit.lm4  %>% 
-  broom::augment()
-
-fit.lm4  %>% 
-  broom::glance()
-
-pred.lm4 <- predict(fit.lm4, test)
-mean((pred.lm4 - test$price)^2)
-ols4.r2 <- 1 - mean((pred.lm4 - test$price)^2) / mean((mean(test$price) - test$price)^2)
-cat("R-square:" , ols4.r2)
-summary(fit.lm4)
+fit_lm4 <- lm(price ~ carat+cut+color+clarity, data = train)
+knitr::kable(fit_lm4 %>% broom::tidy())
+knitr::kable(fit_lm4 %>% broom::augment())
+knitr::kable(fit_lm4 %>% broom::glance())
 ```
 
+**Model with 3 variables** 
 
+<div align="center"> price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity </div>
+
+The estimated effect of carat on diamond price is 8746, the estimated effect of color is -319, and the estimated effect of clarity is 537. 
+
+```{r Model with 3 variables}
+fit_lm3 <- lm(price ~ carat+color+clarity, data = train)
+knitr::kable(fit_lm3 %>% broom::tidy())
+knitr::kable(fit_lm3 %>% broom::augment())
+knitr::kable(fit_lm3 %>% broom::glance())
+```
+
+# Conclusion
+
+Both models with 3 and 4 variables present slightly different values. The estimated effect of variables on diamonds price are about the same from each model. The R-squared of 3 variable model ($R^2$ = 0.903) is only 2.5 percent less than the R-squared of 4 variable model. Both models present high t-value and significant p-value. Therefore,  I consider choosing the 3 variables model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables. 
 
 
