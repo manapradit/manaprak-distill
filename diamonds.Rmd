@@ -267,7 +267,7 @@ plot(regfit_full, scale="r2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
 plot(regfit_full, scale="adjr2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
 ```
 
-# Model
+# Regression Model
 
 **Model with 4 variables:**
 
