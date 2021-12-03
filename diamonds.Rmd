@@ -22,11 +22,11 @@ library(leaps)
 
 # Overview
 
-Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond price and create interactive application to estimate the input characteristic. We run regression using diamonds dataset which consists of 53940 round diamonds and 10 variables. The final model use carat, color, and clarity to estimate the price ($R^2$ = 0.903).
+Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond prices and create an interactive application to estimate the input characteristic. We run regressions using the diamonds dataset, consisting of 53,940 round diamonds and ten variables. The final model use carat, color, and clarity as variables to estimate their causality on diamond price. The model goodness of fit is evaluated by $R^2$ of 0.903.
 
 # Data Description
 
-I found the dataset from Kaggle website (https://www.kaggle.com/shivam2503/diamonds). It can also be downloaded from R Tidyverse package or ggplot2 package, called `diamonds`. The data set consist of round cut diamonds from Tiffany & Co's snapshot price list in 2017. The original dataset includes 53940 samples and 10 variables. However, this analysis will dropped 20 observations after cleaning the data. There are 7 numerical variable and 4 categorical variable. 
+I have found the dataset from Kaggle website (https://www.kaggle.com/shivam2503/diamonds). It can also be downloaded from the R `Tidyverse` package or `Ggplot2` package, called `diamonds`. The dataset consists of round cut diamonds from Tiffany & Co's snapshot price list in 2017. The original dataset includes 53,940 samples and ten variables. However, this analysis will drop 20 observations after cleaning the data. There are seven numerical variables and four categorical variables.  
 
 |variable|Type|Detail|
 |--------|--------|---------------------------------------------------|
@@ -41,7 +41,7 @@ I found the dataset from Kaggle website (https://www.kaggle.com/shivam2503/diamo
 |depth   |Numeric |Total depth percentage|
 |table   |Numeric |Width of top of diamond relative to widest point|
 
-Let's look at the diamonds dataset from the R package. We do not need to separately download the raw data file because the data is available in Ggplot2, which is subset of Tidyverse package. If you want to import the data file into R, you can use `read_csv` function in the comment below. Then, we can use `glimpse` function to look at raw data.
+Let's look at the diamonds dataset from the R package. We do not need to separately download the raw data file because the data is available in `Ggplot2`, a subset of the `Tidyverse` package. If you want to import the data file into R, you can use the `read_csv` function in the comment below. Then, we can use the `glimpse` function to look at raw data.
 
 ```{r Import data}
 #diamonds <- read_csv(here::here("data", "diamonds.csv")) 
@@ -50,7 +50,7 @@ glimpse(diamonds)
 
 # Data cleaning and preparation
 
-The diamonds data requires small cleaning as it is very clean and well organized. Since I will perform regression, I decided to convert the 3 ordinal variables to numeric scale. and assumed that the scale for color and clarity are equally scale across the levels. I also remove observation with value zero in x, y, and z variables because it does not make sense if the dimension is zero. The dataset now have 53920 samples and 10 variables.
+The diamonds data requires small cleaning because it is very clean and well organized. As I will run regression models, I have decided to convert the three ordinal variables to numeric scales. I also assume that the scale for color and clarity variables is equally scaled across the levels. In addition, I remove observation with value zero in x, y and z variables because it does not make sense if the dimension is zero. The dataset now has 53,920 samples and ten variables.
 
 ```{r Data cleaning}
 # use plyr::revalue to convert cut, color, and clarity scales to number
@@ -68,7 +68,7 @@ summary(data)
 
 ## Distribution and normality of each variable
 
-In this section we are going to explore the distribution and normality using `plot_normality()` function in  `dlookr` package. The function provides normality diagnosis of each variable including distribution of the original data (up left), Q-Q plot (up right), and transformation using log and square root (bottom).
+In this section, we will explore the distribution and normality using the `plot_normality()` function in the `Dlookr` package. The function provides normality diagnosis of each variable, including distribution of the original data (upper left), Q-Q plot (upper right), and transformation using log and square root (bottom).
 
 ```{r Normality}
 dlookr::plot_normality(data)
@@ -84,7 +84,7 @@ dplyr::count(data,clarity)
 
 **Pie chart of the Diamond Cut**
 
-The pie chart shows the diamond cut ratio. The majority of the diamond was pretty well. IN this given data, 40 percent of the diamond was ideal cut. 26 percent was premium. 22 percent was very good. And, only 3 percent was fair.
+The pie chart shows the diamond cut ratio. Overall, the diamond quality cut was excellent, with 40 percent accounting for ideal quality, 26 percent for premium quality, 22 percent for very good quality, 3 percent was fair quality.
 
 ```{r Pie chart}
 diamonds%>%
@@ -104,7 +104,7 @@ diamonds%>%
 
 **Diamond Frequency by Color**
 
-The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J at, which is more yellow than other levels.
+The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. In addition, 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J, which is more yellow than other levels.
 
 ```{r Bar chart}
 diamonds%>%
@@ -125,7 +125,7 @@ diamonds%>%
 
 **Diamond Frequency by Clarity Level**
 
-The lollipop chart presents the data frequency by clarity color. The majority of diamonds are slightly included, such as VS2, SI1, and SI2. There are 1,790 internally flawless diamonds. The included diamond is smallest at only 738 observations.
+The lollipop chart presents the data frequency by clarity color. Most diamonds are slightly included, such as VS2, SI1, and SI2 levels. There are 1,790 internally flawless diamonds. The included diamond is the smallest at only 738 observations.
 
 ```{r Lollipop chart}
 diamonds%>%
@@ -159,7 +159,7 @@ diamonds%>%
 
 ## Diamond Price, Carat, and Cut
 
-Let's explore more about the relations between price, carat, and cut. The scatter plot shows that the better quality cut with the same amount of carat has higher price.
+Let's explore more about the relations between price, carat, and cut. The scatter plot shows that the better cut quality with the same carat has a higher price.
 
 ```{r EDA price carat}
 diamonds%>%
@@ -174,7 +174,7 @@ diamonds%>%
   coord_flip()
 ```
 
-Before moving on to the next step, I want to check all the variable name in the dataset for validation and to easily include them in the next sections. 
+Before moving on to the next step, I want to check all the variable names in the dataset for validation and easily include them in the following sections.
 
 ```{r Column name}
 colnames(data)
@@ -182,7 +182,7 @@ colnames(data)
 
 ## Correlations 
 
-The correlation plot below show relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All 3 variables also highly correlate to carat variable. While, the relation between dependent variable with cut and depth has very small negative relation. Therefore, I will remove variable x, y, and z to prevent multicollinearity.
+The correlation plot below shows relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All three variables are also highly correlated to the carat variable. In contrast, the relations between the dependent variable with the quality of cut and the diamond depth is very small negative relation. Therefore, I will remove variables x, y, and z to prevent multicollinearity.
 
 ```{r Correlogram0, include=FALSE}
 # I only include the last correlogram in the report.
@@ -238,7 +238,7 @@ VIF(lm(price~carat+cut+color+clarity+depth+table, data=data))
 
 ## Data division into train data and test data
 
-We will randomly divide the data into 2 groups, train data and test data. First, we set the seed to make sure that we will get the same random result after running the code for interpretation purpose. 70 percent of the data or 37744 observations is the train data. The train data will be used to predict the model and the test data will be used to fit the final model to observe the model accuracy. 
+We will randomly divide the data into two groups: train and test data. First, we set the seed to ensure that we will get the same random result after running the code and the same interpretation. Seventy percent of the data or 37744 observations is the train data. The train data will be used to predict the model, and the test data will be used to fit the final model to observe the model accuracy. 
 
 ```{r Train test data}
 data2 <- data %>% 
@@ -254,7 +254,7 @@ setdiff(train)
 
 ## Subsetting
 
-The below charts allow us to see the different values of BIC, Cp, $R^2$, and adjusted $R^2$, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model with 4 variables and 3 variables, with and without cut variable.
+The below charts illustrate the different values of $BIC$, $C_{p}$, $R^2$, and $adjusted R^2$, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model containing 4 variables (carat, cut, color, and clarity) and 3 variables (carat, color, and clarity).
 
 ```{r Subsetting}
 # require library(leaps)
@@ -273,7 +273,7 @@ plot(regfit_full, scale="adjr2", col=c("#83af9b","#c8c8a9", "#f9cdad"))
 
 **price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity**
 
-The estimated effect of carat on diamond price is 8776, the estimated effect of cut is 165, the estimated effect of color is -318, and the estimated effect of clarity is 518. 
+The estimated effects of carat, cut, color, and clarity on diamond price are 8776, 165, -318, and 518, respectively. Hence, 1 unit increase in clarity will result in 518 dollars in diamond price.
 
 ```{r Model with 4 variables}
 fit_lm4 <- lm(price ~ carat+cut+color+clarity, data = train)
@@ -297,6 +297,6 @@ knitr::kable(fit_lm3 %>% broom::glance())
 
 # Conclusion
 
-Both models with 3 and 4 variables present slightly different values. The estimated effect of variables on diamonds price are about the same from each model. The R-squared of 3 variable model ($R^2$ = 0.903) is only 2.5 percent less than the R-squared of 4 variable model. Both models present high t-value and significant p-value. Therefore,  I consider choosing the 3 variables model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables. 
+The models consisting of 3 variables and 4 variables represent slightly different values. The estimated effects of variables on diamonds price are about the same in each model. The R-squared of 3 variable model ($R^2$ = 0.903) is only 2.5 percent less than that of 4 variable model. Both models present high t-value with significant p-value. Therefore,  I consider choosing the 3 variable model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables. 
 
 

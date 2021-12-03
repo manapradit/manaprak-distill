@@ -2085,9 +2085,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-article">
 <h1 id="sta-518-project">STA 518 Project</h1>
 <h1 id="overview">Overview</h1>
-<p>Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond price and create interactive application to estimate the input characteristic. We run regression using diamonds dataset which consists of 53940 round diamonds and 10 variables. The final model use carat, color, and clarity to estimate the price (<span class="math inline">\(R^2\)</span> = 0.903).</p>
+<p>Diamonds take billions of years to form and not all of them survive the long journey. This project aims to predict diamond prices and create an interactive application to estimate the input characteristic. We run regressions using the diamonds dataset, consisting of 53,940 round diamonds and ten variables. The final model use carat, color, and clarity as variables to estimate their causality on diamond price. The model goodness of fit is evaluated by <span class="math inline">\(R^2\)</span> of 0.903.</p>
 <h1 id="data-description">Data Description</h1>
-<p>I found the dataset from Kaggle website (<a href="https://www.kaggle.com/shivam2503/diamonds" class="uri">https://www.kaggle.com/shivam2503/diamonds</a>). It can also be downloaded from R Tidyverse package or ggplot2 package, called <code>diamonds</code>. The data set consist of round cut diamonds from Tiffany &amp; Co’s snapshot price list in 2017. The original dataset includes 53940 samples and 10 variables. However, this analysis will dropped 20 observations after cleaning the data. There are 7 numerical variable and 4 categorical variable.</p>
+<p>I have found the dataset from Kaggle website (<a href="https://www.kaggle.com/shivam2503/diamonds" class="uri">https://www.kaggle.com/shivam2503/diamonds</a>). It can also be downloaded from the R <code>Tidyverse</code> package or <code>Ggplot2</code> package, called <code>diamonds</code>. The dataset consists of round cut diamonds from Tiffany &amp; Co’s snapshot price list in 2017. The original dataset includes 53,940 samples and ten variables. However, this analysis will drop 20 observations after cleaning the data. There are seven numerical variables and four categorical variables.</p>
 <table>
 <colgroup>
 <col style="width: 11%" />
@@ -2154,7 +2154,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tr>
 </tbody>
 </table>
-<p>Let’s look at the diamonds dataset from the R package. We do not need to separately download the raw data file because the data is available in Ggplot2, which is subset of Tidyverse package. If you want to import the data file into R, you can use <code>read_csv</code> function in the comment below. Then, we can use <code>glimpse</code> function to look at raw data.</p>
+<p>Let’s look at the diamonds dataset from the R package. We do not need to separately download the raw data file because the data is available in <code>Ggplot2</code>, a subset of the <code>Tidyverse</code> package. If you want to import the data file into R, you can use the <code>read_csv</code> function in the comment below. Then, we can use the <code>glimpse</code> function to look at raw data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#diamonds &lt;- read_csv(here::here("data", "diamonds.csv")) </span>
@@ -2175,7 +2175,7 @@ $ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78~
 $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</code></pre>
 </div>
 <h1 id="data-cleaning-and-preparation">Data cleaning and preparation</h1>
-<p>The diamonds data requires small cleaning as it is very clean and well organized. Since I will perform regression, I decided to convert the 3 ordinal variables to numeric scale. and assumed that the scale for color and clarity are equally scale across the levels. I also remove observation with value zero in x, y, and z variables because it does not make sense if the dimension is zero. The dataset now have 53920 samples and 10 variables.</p>
+<p>The diamonds data requires small cleaning because it is very clean and well organized. As I will run regression models, I have decided to convert the three ordinal variables to numeric scales. I also assume that the scale for color and clarity variables is equally scaled across the levels. In addition, I remove observation with value zero in x, y and z variables because it does not make sense if the dimension is zero. The dataset now has 53,920 samples and ten variables.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use plyr::revalue to convert cut, color, and clarity scales to number</span>
@@ -2184,8 +2184,8 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 <span class='va'>data</span><span class='op'>$</span><span class='va'>clarity</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/plyr/man/revalue.html'>revalue</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>clarity</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"IF"</span><span class='op'>=</span><span class='fl'>8</span>, <span class='st'>"VVS1"</span><span class='op'>=</span><span class='fl'>7</span>, <span class='st'>"VVS2"</span><span class='op'>=</span><span class='fl'>6</span>, <span class='st'>"VS1"</span><span class='op'>=</span><span class='fl'>5</span>, <span class='st'>"VS2"</span><span class='op'>=</span><span class='fl'>4</span>, <span class='st'>"SI1"</span><span class='op'>=</span><span class='fl'>3</span>, <span class='st'>"SI2"</span><span class='op'>=</span><span class='fl'>2</span>, <span class='st'>"I1"</span><span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>data</span><span class='op'>$</span><span class='va'>cut</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/plyr/man/revalue.html'>revalue</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cut</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Fair"</span><span class='op'>=</span><span class='fl'>1</span>, <span class='st'>"Good"</span><span class='op'>=</span><span class='fl'>2</span>, <span class='st'>"Very Good"</span><span class='op'>=</span><span class='fl'>3</span>, <span class='st'>"Premium"</span><span class='op'>=</span><span class='fl'>4</span>, <span class='st'>"Ideal"</span><span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span> 
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span> 
 
 <span class='co'>#describe(data, ranges = FALSE)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
@@ -2214,7 +2214,7 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
  Max.   :58.900   Max.   :31.80  </code></pre>
 </div>
 <h2 id="distribution-and-normality-of-each-variable">Distribution and normality of each variable</h2>
-<p>In this section we are going to explore the distribution and normality using <code>plot_normality()</code> function in <code>dlookr</code> package. The function provides normality diagnosis of each variable including distribution of the original data (up left), Q-Q plot (up right), and transformation using log and square root (bottom).</p>
+<p>In this section, we will explore the distribution and normality using the <code>plot_normality()</code> function in the <code>Dlookr</code> package. The function provides normality diagnosis of each variable, including distribution of the original data (upper left), Q-Q plot (upper right), and transformation using log and square root (bottom).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dlookr</span><span class='fu'>::</span><span class='fu'><a href='https://choonghyunryu.github.io/dlookr/reference/plot_normality.data.frame.html'>plot_normality</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
@@ -2223,14 +2223,15 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 <p><img src="diamonds_files/figure-html5/Normality-1.png" width="624" /><img src="diamonds_files/figure-html5/Normality-2.png" width="624" /><img src="diamonds_files/figure-html5/Normality-3.png" width="624" /><img src="diamonds_files/figure-html5/Normality-4.png" width="624" /><img src="diamonds_files/figure-html5/Normality-5.png" width="624" /><img src="diamonds_files/figure-html5/Normality-6.png" width="624" /><img src="diamonds_files/figure-html5/Normality-7.png" width="624" /><img src="diamonds_files/figure-html5/Normality-8.png" width="624" /><img src="diamonds_files/figure-html5/Normality-9.png" width="624" /><img src="diamonds_files/figure-html5/Normality-10.png" width="624" /></p>
 </div>
 <h1 id="exploratory-data-analysis-eda">Exploratory Data Analysis (EDA)</h1>
-<p>The pie chart shows the diamond cut ratio. The majority of the diamond was pretty well. IN this given data, 40 percent of the diamond was ideal cut. 26 percent was premium. 22 percent was very good. And, only 3 percent was fair.</p>
+<p><strong>Pie chart of the Diamond Cut</strong></p>
+<p>The pie chart shows the diamond cut ratio. Overall, the diamond quality cut was excellent, with 40 percent accounting for ideal quality, 26 percent for premium quality, 22 percent for very good quality, 3 percent was fair quality.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/mutate.html'>mutate</a></span><span class='op'>(</span>percent_data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>count</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>/</span><span class='fl'>53920</span><span class='op'>)</span>,<span class='fl'>2</span><span class='op'>)</span>,<span class='st'>"%"</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> 
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/plyr/man/mutate.html'>mutate</a></span><span class='op'>(</span>percent_data<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>count</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>/</span><span class='fl'>53920</span><span class='op'>)</span>,<span class='fl'>2</span><span class='op'>)</span>,<span class='st'>"%"</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='st'>""</span>,y<span class='op'>=</span><span class='va'>count</span>, fill<span class='op'>=</span><span class='va'>cut</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"identity"</span>, width<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_polar.html'>coord_polar</a></span><span class='op'>(</span><span class='st'>"y"</span>, start<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span><span class='op'>+</span>
@@ -2243,13 +2244,14 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 </div>
 <p><img src="diamonds_files/figure-html5/Pie%20chart-1.png" width="624" /></p>
 </div>
-<p>The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J at, which is more yellow than other levels.</p>
+<p><strong>Diamond Frequency by Color</strong></p>
+<p>The bar chart demonstrates the frequency of the color level. The majority of data consist of color level G at 11,284 observations. In addition, 6,674 diamonds have color level D, which is colorless. The lowest frequency is color level J, which is more yellow than other levels.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>color</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>color</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>color</span>,<span class='va'>count</span>,y<span class='op'>=</span><span class='va'>count</span>, fill<span class='op'>=</span><span class='va'>color</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"identity"</span>, colour<span class='op'>=</span><span class='st'>"black"</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_manual.html'>scale_fill_manual</a></span><span class='op'>(</span>values<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"#ffffff"</span>, <span class='st'>"#fefcf3"</span>, <span class='st'>"#fdfaeb"</span>, <span class='st'>"#fdf8e4"</span>, <span class='st'>"#fcf6dc"</span>, <span class='st'>"#fcf5d4"</span>, <span class='st'>"#fbf3cd"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
@@ -2264,13 +2266,14 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 </div>
 <p><img src="diamonds_files/figure-html5/Bar%20chart-1.png" width="624" /></p>
 </div>
-<p>The lollipop chart presents the data frequency by clarity color. The majority of diamonds are slightly included, such as VS2, SI1, and SI2. There are 1,790 internally flawless diamonds. The included diamond is smallest at only 738 observations.</p>
+<p><strong>Diamond Frequency by Clarity Level</strong></p>
+<p>The lollipop chart presents the data frequency by clarity color. Most diamonds are slightly included, such as VS2, SI1, and SI2 levels. There are 1,790 internally flawless diamonds. The included diamond is the smallest at only 738 observations.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>clarity</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>clarity</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>count<span class='op'>=</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>clarity</span>, y<span class='op'>=</span><span class='va'>count</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_segment.html'>geom_segment</a></span><span class='op'>(</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>clarity</span>, xend<span class='op'>=</span><span class='va'>clarity</span>, y<span class='op'>=</span><span class='fl'>0</span>, yend<span class='op'>=</span><span class='va'>count</span><span class='op'>)</span>, color<span class='op'>=</span><span class='st'>"grey"</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span> color<span class='op'>=</span><span class='st'>"gold"</span>, size<span class='op'>=</span><span class='fl'>4</span>, alpha<span class='op'>=</span><span class='fl'>0.6</span><span class='op'>)</span><span class='op'>+</span>
@@ -2287,19 +2290,19 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 <p><img src="diamonds_files/figure-html5/Lollipop%20chart-1.png" width="624" /></p>
 </div>
 <h2 id="diamond-price-carat-and-cut">Diamond Price, Carat, and Cut</h2>
-<p>Let’s explore more about the relations between price, carat, and cut. The scatter plot shows that the better quality cut with the same amount of carat has higher price.</p>
+<p>Let’s explore more about the relations between price, carat, and cut. The scatter plot shows that the better cut quality with the same carat has a higher price.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>carat</span>, <span class='va'>price</span>, colour <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Scatter plot of Price and Carat by Cut Quality"</span>, x<span class='op'>=</span><span class='st'>"Carat"</span>, y<span class='op'>=</span><span class='st'>"Diamond Price"</span>, fill<span class='op'>=</span><span class='st'>"Cut Quality"</span><span class='op'>)</span>
 </code></pre>
 </div>
 <img src="diamonds_files/figure-html5/EDA%20price%20carat-1.png" width="624" />
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>diamonds</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>y</span><span class='op'>&gt;</span><span class='fl'>0</span>, <span class='va'>z</span><span class='op'>&gt;</span><span class='fl'>0</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>price</span>, <span class='va'>carat</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>cut</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Boxplot of Price and Carat by Cut Quality"</span>, x<span class='op'>=</span><span class='st'>"Diamond Price"</span>, y<span class='op'>=</span><span class='st'>"Carat"</span>, fill<span class='op'>=</span><span class='st'>"Cut Quality"</span><span class='op'>)</span><span class='op'>+</span>
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/coord_flip.html'>coord_flip</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -2307,7 +2310,7 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 </div>
 <p><img src="diamonds_files/figure-html5/EDA%20price%20carat-2.png" width="624" /></p>
 </div>
-<p>Before moving on to the next step, I want to check all the variable name in the dataset for validation and to easily include them in the next sections.</p>
+<p>Before moving on to the next step, I want to check all the variable names in the dataset for validation and easily include them in the following sections.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
@@ -2317,7 +2320,7 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
  [7] &quot;price&quot;   &quot;x&quot;       &quot;y&quot;       &quot;z&quot;      </code></pre>
 </div>
 <h2 id="correlations">Correlations</h2>
-<p>The correlation plot below show relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All 3 variables also highly correlate to carat variable. While, the relation between dependent variable with cut and depth has very small negative relation. Therefore, I will remove variable x, y, and z to prevent multicollinearity.</p>
+<p>The correlation plot below shows relationships between the dependent variable and independent variables. Variable x, y, and z have significantly high positive relations with each other at more than 0.96. All three variables are also highly correlated to the carat variable. In contrast, the relations between the dependent variable with the quality of cut and the diamond depth is very small negative relation. Therefore, I will remove variables x, y, and z to prevent multicollinearity.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># require library(ggstatsplot)</span>
@@ -2351,23 +2354,23 @@ $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49~</cod
 </div>
 <h1 id="model-selection">Model selection</h1>
 <h2 id="data-division-into-train-data-and-test-data">Data division into train data and test data</h2>
-<p>We will randomly divide the data into 2 groups, train data and test data. First, we set the seed to make sure that we will get the same random result after running the code for interpretation purpose. 70 percent of the data or 37744 observations is the train data. The train data will be used to predict the model and the test data will be used to fit the final model to observe the model accuracy.</p>
+<p>We will randomly divide the data into two groups: train and test data. First, we set the seed to ensure that we will get the same random result after running the code and the same interpretation. Seventy percent of the data or 37744 observations is the train data. The train data will be used to predict the model, and the test data will be used to fit the final model to observe the model accuracy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data2</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/select.html'>select</a></span><span class='op'>(</span><span class='va'>price</span>,<span class='va'>carat</span>,<span class='va'>cut</span>,<span class='va'>color</span>,<span class='va'>clarity</span>,<span class='va'>depth</span>,<span class='va'>table</span>,<span class='va'>x</span>,<span class='va'>y</span>,<span class='va'>z</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data2</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>price</span>,<span class='va'>carat</span>,<span class='va'>cut</span>,<span class='va'>color</span>,<span class='va'>clarity</span>,<span class='va'>depth</span>,<span class='va'>table</span>,<span class='va'>x</span>,<span class='va'>y</span>,<span class='va'>z</span><span class='op'>)</span>
 
 <span class='co'># split data for training data and test data</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>789</span><span class='op'>)</span> <span class='co'># set seed to gain the same random pattern</span>
-<span class='va'>train</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
-<span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/sample_n.html'>sample_frac</a></span><span class='op'>(</span><span class='fl'>0.7</span><span class='op'>)</span>
-<span class='va'>test</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span>
+<span class='va'>train</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_frac</a></span><span class='op'>(</span><span class='fl'>0.7</span><span class='op'>)</span>
+<span class='va'>test</span> <span class='op'>=</span> <span class='va'>data2</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
 <span class='fu'><a href='https://generics.r-lib.org/reference/setops.html'>setdiff</a></span><span class='op'>(</span><span class='va'>train</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
-<h1 id="data-subsetting">Data subsetting</h1>
-<p>The below charts allow us to see the different value of BIC, Cp, <span class="math inline">\(R^2\)</span>, and adjusted <span class="math inline">\(R^2\)</span>, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model with 4 variables and 3 variables, with and without cut variable.</p>
+<h2 id="subsetting">Subsetting</h2>
+<p>The below charts illustrate the different values of <span class="math inline">\(BIC\)</span>, <span class="math inline">\(C_{p}\)</span>, <span class="math inline">\(R^2\)</span>, and <span class="math inline">\(adjusted R^2\)</span>, regarding the different number of variables in the model. According to the charts, adding depth and table variables have almost no contribution to the model. Hence, we will not consider adding depth and table variables to the model. In addition, adding the quality of diamond cut in the model appear small change to the model. So, I will compare the model containing 4 variables (carat, cut, color, and clarity) and 3 variables (carat, color, and clarity).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># require library(leaps)</span>
@@ -2416,16 +2419,14 @@ Selection Algorithm: exhaustive
 </div>
 <p><img src="diamonds_files/figure-html5/Subsetting-4.png" width="624" /></p>
 </div>
-<h1 id="model">Model</h1>
-<p><strong>Model with 4 variables</strong></p>
-<div data-align="center">
-price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity
-</div>
-<p>The estimated effect of carat on diamond price is 8776, the estimated effect of cut is 165, the estimated effect of color is -318, and the estimated effect of clarity is 518.</p>
+<h1 id="regression-model">Regression Model</h1>
+<p><strong>Model with 4 variables:</strong></p>
+<p><strong>price = -4974.997 + 8776.430 x carat + 165.511 x cut - 318.820 x color + 518.648 x clarity</strong></p>
+<p>The estimated effects of carat, cut, color, and clarity on diamond price are 8776, 165, -318, and 518, respectively. Hence, 1 unit increase in clarity will result in 518 dollars in diamond price.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit_lm4</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/notdocumentedyet.html'>lm</a></span><span class='op'>(</span><span class='va'>price</span> <span class='op'>~</span> <span class='va'>carat</span><span class='op'>+</span><span class='va'>cut</span><span class='op'>+</span><span class='va'>color</span><span class='op'>+</span><span class='va'>clarity</span>, data <span class='op'>=</span> <span class='va'>train</span><span class='op'>)</span>
-<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -2537,7 +2538,7 @@ clarity
 </tbody>
 </table>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -2932,7 +2933,7 @@ clarity
 </tbody>
 </table>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm4</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -3018,15 +3019,13 @@ nobs
 </tbody>
 </table>
 </div>
-<p><strong>Model with 3 variables</strong></p>
-<div data-align="center">
-price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity
-</div>
+<p><strong>Model with 3 variables:</strong></p>
+<p><strong>price = -4075.927 + 8746.191 x carat - 319.215 x color + 536.701 x clarity</strong></p>
 <p>The estimated effect of carat on diamond price is 8746, the estimated effect of color is -319, and the estimated effect of clarity is 537.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fit_lm3</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/VGAM/man/notdocumentedyet.html'>lm</a></span><span class='op'>(</span><span class='va'>price</span> <span class='op'>~</span> <span class='va'>carat</span><span class='op'>+</span><span class='va'>color</span><span class='op'>+</span><span class='va'>clarity</span>, data <span class='op'>=</span> <span class='va'>train</span><span class='op'>)</span>
-<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -3121,7 +3120,7 @@ clarity
 </tbody>
 </table>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span><span class='fu'><a href='https://rdrr.io/pkg/dplyr/man/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/augment.html'>augment</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/slice.html'>slice</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -3483,7 +3482,7 @@ clarity
 </tbody>
 </table>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://rdrr.io/pkg/magrittr/man/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>fit_lm3</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/glance.html'>glance</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -3570,7 +3569,7 @@ nobs
 </table>
 </div>
 <h1 id="conclusion">Conclusion</h1>
-<p>Both models with 3 and 4 variables present slightly different values. The estimated effect of variables on diamonds price are about the same from each model. The R-squared of 3 variable model (<span class="math inline">\(R^2\)</span> = 0.903) is only 2.5 percent less than the R-squared of 4 variable model. Both models present high t-value and significant p-value. Therefore, I consider choosing the 3 variables model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables.</p>
+<p>The models consisting of 3 variables and 4 variables represent slightly different values. The estimated effects of variables on diamonds price are about the same in each model. The R-squared of 3 variable model (<span class="math inline">\(R^2\)</span> = 0.903) is only 2.5 percent less than that of 4 variable model. Both models present high t-value with significant p-value. Therefore, I consider choosing the 3 variable model, including, carat, color, and clarity. This is because the model is simpler and almost as effective as the model with 4 variables.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
