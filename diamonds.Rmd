@@ -272,7 +272,7 @@ The estimated effect of carat on diamond price is 8776, the estimated effect of 
 ```{r Model with 4 variables}
 fit_lm4 <- lm(price ~ carat+cut+color+clarity, data = train)
 knitr::kable(fit_lm4 %>% broom::tidy())
-knitr::kable(fit_lm4 %>% broom::augment())
+knitr::kable(fit_lm4 %>% broom::augment()%>%slice(1:10))
 knitr::kable(fit_lm4 %>% broom::glance())
 ```
 
@@ -285,7 +285,7 @@ The estimated effect of carat on diamond price is 8746, the estimated effect of 
 ```{r Model with 3 variables}
 fit_lm3 <- lm(price ~ carat+color+clarity, data = train)
 knitr::kable(fit_lm3 %>% broom::tidy())
-knitr::kable(fit_lm3 %>% broom::augment())
+knitr::kable(fit_lm3 %>% broom::augment()%>%slice(1:10))
 knitr::kable(fit_lm3 %>% broom::glance())
 ```
 
