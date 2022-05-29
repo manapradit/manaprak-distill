@@ -2,6 +2,8 @@
 title: "Kanyanee's Project"
 description: |
   Welcome to the website. I hope you enjoy it!
+  [Diamonds Project](https://manapradit.github.io/manaprak-distill/diamonds.html)
+The project aims to estimate the effects on diamond prices using regression. The diamonds dataset consists of 53,940 round diamond samples and ten variables.
 site: distill::distill_website
 ---
 
